@@ -7,7 +7,8 @@ import { Button } from 'react-native-elements';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-//
+// How To screen that gives simple instructions and a button to go back to the home screen.
+// Styles are set by stylesheet at end of file, button is an outline type to show more background
 function HowTo( { navigation } ) {
 	return (
 		<View style={styles.container}>
@@ -22,6 +23,10 @@ function HowTo( { navigation } ) {
 	);
 }
 
+// Home screen, styles are set by the stylesheet at end of file.
+// Image background is stored in the assets folder
+// text is output to screen and button is defined to only be an outline and will
+// take us to the HowTo function
 function Home( { navigation } ) {
 	return (
 		<View style={styles.container}>
@@ -35,10 +40,10 @@ function Home( { navigation } ) {
 	);
 }
 
+// constant global variable that controls the stack navigation
 const Stack = createStackNavigator();
 
-// "Main" app function, styles are set by the stylesheet below.  Background Image is
-// set from assets folder, and Text is output to screen
+// "Main" app function, styles are set by the stylesheet below.  Stack Navigation implementation is setup here.
 export default function App() {
   return (
     <View style={styles.container}>
@@ -56,6 +61,7 @@ export default function App() {
 // image sets the background image width/height
 // headerText sets text for Heading Style
 // paragraphText sets text for normal font style
+// button sets styles for buttons
 // colors are chosen by hex code and font family
 // has been changed from defaults.  Padding
 // for text has been set to allow them to show
