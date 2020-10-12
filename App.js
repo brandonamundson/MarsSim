@@ -1,6 +1,6 @@
 // libraries imported from react and react-native
 import React from 'react';
-import { ImageBackground, Text, View, StyleSheet} from 'react-native';
+import { ImageBackground, Text, View, StyleSheet, Platform} from 'react-native';
 // imports full button features from react-native-elements
 import { Button } from 'react-native-elements';
 // imports stack navigation components
@@ -12,7 +12,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 function HowTo( { navigation } ) {
 	return (
 		<View style={styles.container}>
-      <ImageBackground style={styles.image} source={require('./assets/unnamed.jpg')}>
+      <ImageBackground style={styles.image} source={require('./assets/mom.jpg')}>
 			  <Text style={styles.headerText}>How To Play</Text>
         <Text style={styles.paragraphText}>This has been decades in the making.  We are in the final stages before
                                             having real life Mars missions.  This app will help inform us if you are
@@ -66,6 +66,7 @@ export default function App() {
 // has been changed from defaults.  Padding
 // for text has been set to allow them to show
 // spaced appropriately on screen.
+// Platform.OS changes styles based on OS type
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -73,24 +74,26 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: '100%',
+	height: '100%',
+	opacity: 100,
   },
   headerText: {
     fontFamily: 'Roboto',
     fontSize: 60,
     color: '#0011FF',
-	  textAlign: 'center',
-	  paddingTop: 200,
-	  paddingBottom: 25,
-	  fontWeight: "bold",
+	textAlign: 'center',
+	paddingTop: 200,
+	paddingBottom: 25,
+	fontWeight: "bold",
   },
   paragraphText: {
     fontFamily: 'Roboto',
     fontSize: 25,
-    color: "#00FF00",
-	  textAlign: 'center',
+	color: "#00CC70",
+	textAlign: 'center',
     paddingHorizontal: 15,
-    paddingBottom: 75
+	paddingBottom: 75,
+	fontWeight: Platform.OS === 'web' ? 'bold' : "normal"
   },
   button: {
     elevation: 8,
