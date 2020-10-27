@@ -1,9 +1,13 @@
 // libraries imported from react and react-native
 import React from 'react';
-import { ImageBackground, Text, View, StyleSheet, Platform, TouchableOpacity, Image } from 'react-native';
+import { ImageBackground, Text, View, StyleSheet, Platform, TouchableOpacity, Image, TextInput } from 'react-native';
 // imports stack navigation components
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+
+// global variable to store users name, initialized to null
+// and changed in the Name Input initial screen
+var usrName = null;
 
 // How To screen that gives simple instructions and a button to go back to the home screen.
 // Styles are set by stylesheet at end of file, button is an outline type to show more background
@@ -12,7 +16,7 @@ function HowTo( { navigation } ) {
 		<View style={styles.container}>
       		<ImageBackground style={styles.image} source={require('./assets/mom.jpg')}>
 				<Text style={styles.headerText}>How To Play</Text>
-       			<Text style={styles.paragraphText}>This has been decades in the making.  We are in the final stages before
+       			<Text style={styles.paragraphText}>{usrName}, this has been decades in the making.  We are in the final stages before
                                             	having real life Mars missions.  This app will help inform us if you are
                                          	   	qualified for the real mission or not.</Text>
 				<View style={styles.container}>
@@ -26,6 +30,26 @@ function HowTo( { navigation } ) {
 	);
 }
 
+// This screen gets the Users name and stores it into global variable usrName
+// The image button does not allow users to navigate further into the app unless 
+// the user's name has been changed from a null value.
+function nameInput( { navigation } ) {
+	return (
+		<View style={styles.container}>
+			<ImageBackground style={styles.image} source={require('./assets/unnamed.jpg')}>
+				<Text style={styles.headerInputText}>Enter your name</Text>
+				<TextInput style={styles.inputTxt} placeholder="Enter Name" onChangeText={text => usrName = text} />
+				<View style={styles.container, {paddingTop: 75}}>
+					<TouchableOpacity onPress={ () => usrName!=null ? navigation.navigate('Home') : alert('Please enter name') } >
+						<Image style={styles.buttonImage} source={require('./assets/12g_on2014_mastcamintovalley_live-1.jpg')} />
+						<Text style={styles.buttonTxt}>Continue</Text>
+					</TouchableOpacity>
+				</View>
+			</ImageBackground>
+		</View>
+	)
+}
+
 // Home screen, styles are set by the stylesheet at end of file.
 // Image background is stored in the assets folder
 // text is output to screen and button is defined to only be an outline and will
@@ -35,7 +59,7 @@ function Home( { navigation } ) {
 		<View style={styles.container}>
 			<ImageBackground style={styles.image} source={require('./assets/unnamed.jpg')}>
       			<Text style={styles.headerText}>Mission to Mars!</Text>
-      			<Text style={styles.paragraphText}>Mission to Mars is a Mars Simulation.  In this simulation
+      			<Text style={styles.paragraphText}>Welcome {usrName}!  Mission to Mars is a Mars Simulation.  In this simulation
         				                         your goal is to establish a thriving colony on Planet Mars.</Text>
 				<View style={styles.container}>
 					<TouchableOpacity onPress={ ()=> navigation.navigate('How To Play') } >
@@ -56,8 +80,9 @@ export default function App() {
   return (
     <View style={styles.container}>
 		<NavigationContainer>
-			<Stack.Navigator initialRouteName='Home'>
-    	    	<Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
+			<Stack.Navigator initialRouteName='Welcome Screen'>
+    	    	<Stack.Screen name="Welcome Screen" component={nameInput} options={{ headerShown:false }} />
+				<Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
         		<Stack.Screen name="How To Play" component={HowTo} options={{ headerShown: false }}/>
       		</Stack.Navigator>
 		</NavigationContainer>
@@ -101,10 +126,30 @@ const styles = StyleSheet.create({
 		paddingBottom: 25,
 		fontWeight: "bold",
 	},
+	headerInputText: {
+		fontFamily: 'Roboto',
+		fontSize: 50,
+		color: '#0011FF',
+		textAlign: 'center',
+		paddingTop: 200,
+		paddingBottom: 75,
+		fontWeight: "bold",
+	},
 	image: {
-    	width: '100%',
+		width: '100%',
 		height: '100%',
 		opacity: 100,
+	},
+	inputTxt: {
+		fontFamily: 'Roboto',
+		fontSize: 35,
+		color: '#0011FF',
+		textAlign: 'center',
+		fontWeight: "bold",		
+		paddingHorizontal: 15,
+		borderColor: '#999',
+		borderStyle: 'solid',
+		borderWidth: 3,
 	},
 	paragraphText: {
     	fontFamily: 'Roboto',
