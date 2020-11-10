@@ -1,7 +1,6 @@
 // libraries imported from react and react-native
 import React, { useState } from 'react';
 import {
-	ImageBackground,
 	Text,
 	View,
 	TouchableOpacity,
@@ -13,12 +12,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 // imports map components from react-native-maps
 import MapView, { Callout, Marker } from 'react-native-maps';
-
+// imports audio components from expo-av
+import { Audio } from 'expo-av';
+// moved certain functions and styles to their own file to save room
 import { styles } from './styles.js';
-
-// global variable to store users name, initialized to null
-// and changed in the Name Input initial screen
-var usrName = null;
+import { nameInput, Home, HowTo } from './navComponents.js';
 
 // variable that's typecast to function that creates a custom map marker
 const CustomMarker = () => (
@@ -26,129 +24,6 @@ const CustomMarker = () => (
 		<Text style={styles.markerText}>Mission Control</Text>
 	</View>
 );
-
-// How To screen that gives simple instructions and a button to go back to the home screen.
-// Styles are set by stylesheet at end of file, button is an outline type to show more background
-function HowTo({ navigation }) {
-	return (
-		<View style={styles.container}>
-			<ImageBackground
-				style={styles.image}
-				source={require('./assets/images/mom.jpg')}
-			>
-				<Text style={styles.headerText}>How To Play</Text>
-				<Text style={styles.paragraphText}>
-					{usrName}, this has been decades in the making. We are in
-					the final stages before having real life Mars missions. This
-					app will help inform us if you are qualified for the real
-					mission or not.
-				</Text>
-				<View style={styles.container}>
-					<TouchableOpacity onPress={() => navigation.push('Home')}>
-						<Image
-							style={styles.buttonImage}
-							source={require('./assets/images/OSIRIS_Mars_true_color.jpg')}
-						/>
-						<Text style={styles.buttonTxt}>Go to Home Page</Text>
-					</TouchableOpacity>
-					<View style={styles.buttonMargin} />
-					<TouchableOpacity
-						onPress={() => navigation.navigate('Mission Control')}
-					>
-						<Image
-							style={styles.buttonImage}
-							source={require('./assets/images/1224px-NASA_logo.svg.png')}
-						/>
-						<Text style={styles.missionControlButtonTxt}>
-							Speak to {'\n\n'} Mission Control
-						</Text>
-					</TouchableOpacity>
-				</View>
-			</ImageBackground>
-		</View>
-	);
-}
-
-// This screen gets the Users name and stores it into global variable usrName
-// The image button does not allow users to navigate further into the app unless
-// the user's name has been changed from a null value.
-function nameInput({ navigation }) {
-	return (
-		<View style={styles.container}>
-			<ImageBackground
-				style={styles.image}
-				source={require('./assets/images/unnamed.jpg')}
-			>
-				<Text style={styles.headerInputText}>Enter your name</Text>
-				<TextInput
-					style={styles.inputTxt}
-					placeholder="Enter Name"
-					onChangeText={(text) => (usrName = text)}
-				/>
-				<View style={(styles.container, { paddingTop: 75 })}>
-					<TouchableOpacity
-						onPress={() =>
-							usrName != null
-								? navigation.navigate('Home')
-								: alert('Please enter name')
-						}
-					>
-						<Image
-							style={styles.loginButtonImage}
-							source={require('./assets/images/12g_on2014_mastcamintovalley_live-1.jpg')}
-						/>
-						<Text style={styles.loginButtonTxt}>Continue</Text>
-					</TouchableOpacity>
-				</View>
-			</ImageBackground>
-		</View>
-	);
-}
-
-// Home screen, styles are set by the stylesheet at end of file.
-// Image background is stored in the assets folder
-// text is output to screen and button is defined to only be an outline and will
-// take us to the HowTo function
-function Home({ navigation }) {
-	return (
-		<View style={styles.container}>
-			<ImageBackground
-				style={styles.image}
-				source={require('./assets/images/unnamed.jpg')}
-			>
-				<Text style={styles.headerText}>Mission to Mars!</Text>
-				<Text style={styles.paragraphText}>
-					Welcome {usrName}! Mission to Mars is a Mars Simulation. In
-					this simulation your goal is to establish a thriving colony
-					on Planet Mars.
-				</Text>
-				<View style={styles.container}>
-					<TouchableOpacity
-						onPress={() => navigation.navigate('How To Play')}
-					>
-						<Image
-							style={styles.buttonImage}
-							source={require('./assets/images/12g_on2014_mastcamintovalley_live-1.jpg')}
-						/>
-						<Text style={styles.buttonTxt}>How to Play</Text>
-					</TouchableOpacity>
-					<View style={styles.buttonMargin} />
-					<TouchableOpacity
-						onPress={() => navigation.navigate('Mission Control')}
-					>
-						<Image
-							style={styles.buttonImage}
-							source={require('./assets/images/1224px-NASA_logo.svg.png')}
-						/>
-						<Text style={styles.missionControlButtonTxt}>
-							Speak to {'\n\n'} Mission Control
-						</Text>
-					</TouchableOpacity>
-				</View>
-			</ImageBackground>
-		</View>
-	);
-}
 
 // screen that takes input from user and stores it into temp variable
 // called report, sends alert saying report was sent to mission control
@@ -224,8 +99,52 @@ const missionControl = ({ navigation }) => {
 // constant global variable that controls the stack navigation
 const Stack = createStackNavigator();
 
+var playbackInstance = null;
+
+const setAudio = () => {
+	Audio.setAudioModeAsync( {
+		allowsRecordingIOS: false,
+		interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+		playsInSilentModeIOS: true,
+		shouldDuckAndroid: true,
+		interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+		playThroughEarpieceAndroid: false,
+	   });
+	   //  This function will be called
+	   loadAudio(true);
+}
+
+async function loadAudio (playing) {
+	if (playbackInstance != null) {
+		await playbackInstance.unloadAsync();
+		playbackInstance.setOnPlaybackStatusUpdate(null);
+		playbackInstance = null;
+	}
+	const source = require('./assets/audio/theme.mp3');
+	const initialStatus = {
+		// Play by default
+		shouldPlay: true,
+		// Control the speed
+		rate: 1.0,
+		// Correct the pitch
+		shouldCorrectPitch: true,
+		// Control the Volume
+		volume: 1,
+		// mute the Audio
+		isMuted: false
+	};
+	const sound = await Audio.Sound.createAsync( source, initialStatus );
+	// Save the response of sound in playbackInstance
+	playbackInstance = sound;
+	//  Make the loop of Audio
+	sound.setIsLoopingAsync(true);
+	//  Play the Music
+	sound.playAsync();
+}
+
 // "Main" app function, styles are set by the stylesheet below.  Stack Navigation implementation is setup here.
 export default function App() {
+	setAudio();
 	return (
 		<View style={styles.container}>
 			<NavigationContainer>

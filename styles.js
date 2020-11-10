@@ -1,4 +1,5 @@
 import { StyleSheet, Platform } from "react-native";
+
 // styles are created here
 // image sets the background image width/height
 // headerText sets text for Heading Style
@@ -9,7 +10,7 @@ import { StyleSheet, Platform } from "react-native";
 // for text has been set to allow them to show
 // spaced appropriately on screen.
 // Platform.OS changes styles based on OS type
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
 	buttonImage: {
 		height: Platform.OS === "web" ? 300 : 120,
 		width: Platform.OS === "web" ? 300 : 120,
@@ -138,5 +139,3 @@ const styles = StyleSheet.create({
 		borderWidth: 3,
 	},
 });
-
-export { styles };
