@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import {
 	Text,
 	View,
-	TouchableOpacity,
 	Image,
 	TextInput,
+	Pressable,
 } from 'react-native';
 // imports stack navigation components
 import { NavigationContainer } from '@react-navigation/native';
@@ -60,7 +60,7 @@ const missionControl = ({ navigation }) => {
 					multiline={true}
 				/>
 				<View style={(styles.container, { paddingTop: 25 })}>
-					<TouchableOpacity
+					<Pressable
 						onPress={() =>
 							report != null
 								? alert(
@@ -70,19 +70,19 @@ const missionControl = ({ navigation }) => {
 						}
 					>
 						<Text style={styles.reportButtonTxt}>Submit</Text>
-					</TouchableOpacity>
+					</Pressable>
 				</View>
 			</Callout>
 			<Callout style={styles.calloutStyle}>
-				<TouchableOpacity onPress={() => navigation.push('Home')}>
+				<Pressable onPress={() => navigation.push('Home')}>
 					<Image
 						style={styles.buttonImage}
 						source={require('./assets/images/OSIRIS_Mars_true_color.jpg')}
 					/>
 					<Text style={styles.buttonTxt}>Go to Home Page</Text>
-				</TouchableOpacity>
+				</Pressable>
 				<View style={styles.buttonMargin} />
-				<TouchableOpacity
+				<Pressable
 					onPress={() => navigation.navigate('How To Play')}
 				>
 					<Image
@@ -90,7 +90,7 @@ const missionControl = ({ navigation }) => {
 						source={require('./assets/images/12g_on2014_mastcamintovalley_live-1.jpg')}
 					/>
 					<Text style={styles.buttonTxt}>How to Play</Text>
-				</TouchableOpacity>
+				</Pressable>
 			</Callout>
 		</View>
 	);

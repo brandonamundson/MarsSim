@@ -4,9 +4,9 @@ import {
 	ImageBackground,
 	Text,
 	View,
-	TouchableOpacity,
 	Image,
 	TextInput,
+	Pressable,
 } from "react-native";
 // stylesheet imported
 import { styles } from "./styles.js";
@@ -32,15 +32,15 @@ export function HowTo({ navigation }) {
 					mission or not.
 				</Text>
 				<View style={styles.container}>
-					<TouchableOpacity onPress={() => navigation.push("Home")}>
+					<Pressable onPress={() => navigation.push("Home")}>
 						<Image
 							style={styles.buttonImage}
 							source={require("./assets/images/OSIRIS_Mars_true_color.jpg")}
 						/>
 						<Text style={styles.buttonTxt}>Go to Home Page</Text>
-					</TouchableOpacity>
+					</Pressable>
 					<View style={styles.buttonMargin} />
-					<TouchableOpacity
+					<Pressable
 						onPress={() => navigation.navigate("Mission Control")}
 					>
 						<Image
@@ -50,7 +50,7 @@ export function HowTo({ navigation }) {
 						<Text style={styles.missionControlButtonTxt}>
 							Speak to {"\n\n"} Mission Control
 						</Text>
-					</TouchableOpacity>
+					</Pressable>
 				</View>
 			</ImageBackground>
 		</View>
@@ -74,7 +74,7 @@ export function nameInput({ navigation }) {
 					onChangeText={(text) => (usrName = text)}
 				/>
 				<View style={(styles.container, { paddingTop: 75 })}>
-					<TouchableOpacity
+					<Pressable
 						onPress={() =>
 							usrName != null
 								? navigation.navigate("Home")
@@ -86,7 +86,7 @@ export function nameInput({ navigation }) {
 							source={require("./assets/images/12g_on2014_mastcamintovalley_live-1.jpg")}
 						/>
 						<Text style={styles.loginButtonTxt}>Continue</Text>
-					</TouchableOpacity>
+					</Pressable>
 				</View>
 			</ImageBackground>
 		</View>
@@ -111,7 +111,7 @@ export function Home({ navigation }) {
 					on Planet Mars.
 				</Text>
 				<View style={styles.container}>
-					<TouchableOpacity
+					<Pressable
 						onPress={() => navigation.navigate("How To Play")}
 					>
 						<Image
@@ -119,9 +119,9 @@ export function Home({ navigation }) {
 							source={require("./assets/images/12g_on2014_mastcamintovalley_live-1.jpg")}
 						/>
 						<Text style={styles.buttonTxt}>How to Play</Text>
-					</TouchableOpacity>
+					</Pressable>
 					<View style={styles.buttonMargin} />
-					<TouchableOpacity
+					<Pressable
 						onPress={() => navigation.navigate("Mission Control")}
 					>
 						<Image
@@ -131,7 +131,7 @@ export function Home({ navigation }) {
 						<Text style={styles.missionControlButtonTxt}>
 							Speak to {"\n\n"} Mission Control
 						</Text>
-					</TouchableOpacity>
+					</Pressable>
 				</View>
 			</ImageBackground>
 		</View>
