@@ -21,6 +21,7 @@
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
-    }
+	},
+	"description": "A fun app built while learning React Native to simulate a Space Mission to Mars."
   }
 }
